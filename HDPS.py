@@ -59,21 +59,29 @@ def domain_port_scan(urls):
 
 
 # 解析出端口号
-def parse_port_str(port_string):
+def parse_input_ports(input_ports):
     # 检测端口后端小于前端的问题
     ports = []
-    if ',' in str(port_string):
-        output(f"[!] 错误输入{port_string} Ports不支持逗号,请使用[空格]和[-]限定范围! 如:8080 80-443", level=LOG_ERROR)
-        exit()
-    if '-' in str(port_string):
-        port_start = int(port_string.split("-")[0].strip())
-        port_end = int(port_string.split("-")[1].strip())
-        if port_end < port_start:
-            output(f'[!] 端口 {port_string} 范围格式输入错误,后部范围小于前部范围!!!', level=LOG_ERROR)
-            print('')
-            sys.exit()
-    else:
-        ports.append(port_string)
+    for port_string in input_ports:
+        if file_is_exist(port_string):
+            lists = read_file_to_list(file_path=port_string, de_strip=True, de_weight=True, de_unprintable=True)
+            ports.extend(lists)
+        else:
+            if ',' in str(port_string):
+                output(f"[!] 错误输入{port_string} Ports不支持逗号,请使用[空格]和[-]限定范围! 如:8080 80-443", level=LOG_ERROR)
+                exit()
+            elif '-' in str(port_string):
+                port_start = int(port_string.split("-")[0].strip())
+                port_end = int(port_string.split("-")[1].strip())
+                if port_end < port_start:
+                    output(f'[!] 端口 {port_string} 范围格式输入错误,后部范围小于前部范围!!!', level=LOG_ERROR)
+                    print('')
+                    sys.exit()
+                else:
+                    for gen_port in range(port_start, port_end + 1):
+                        ports.append(gen_port)
+            else:
+                ports.append(port_string)
     return ports
 
 
@@ -97,9 +105,8 @@ def init_input_target(input_target, input_ports, input_proto):
         input_ports = [input_ports]
     ports = []
     if isinstance(input_ports, list):
-        for port_str in input_ports:
-            parse_ports = parse_port_str(port_str)
-            ports.extend(parse_ports)
+        parse_ports = parse_input_ports(input_ports)
+        ports.extend(parse_ports)
     #  去重输入端口
     ports = list(dict.fromkeys(ports))
 
@@ -133,7 +140,7 @@ def parse_input():
                                  help=f"Specify the target URLs or Target File, Default is [{GB_TARGET}]")
     # 指定扫描的端口号
     argument_parser.add_argument("-p", "--ports", default=GB_PORTS, nargs="+",
-                                 help=f"Specify the ports list or ports string, Default is [{GB_PORTS}]")
+                                 help=f"Specify the ports list or ports File, Default is [{GB_PORTS}]")
     # 指定扫描的协议类型
     argument_parser.add_argument("-P", "--protos", default=GB_PROTOS, nargs="+",
                                  help=f"Specify the proto list or proto string, Default is [{GB_PROTOS}]")
