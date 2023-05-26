@@ -96,7 +96,11 @@ def init_input_target(input_target, input_ports, input_proto):
             if file_is_exist(target):
                 targets = read_file_to_list(file_path=target, de_strip=True, de_weight=True, de_unprintable=True)
             else:
-                targets.append(target)
+                if "://" not in target and ("\\" in target or "/" in target or str(target).endswith(".txt")):
+                    output(f"[!] 目标文件路径不存在 {target}", level=LOG_ERROR)
+                    exit()
+                else:
+                    targets.append(target)
     #  去重输入目标
     targets = list(dict.fromkeys(targets))
 
