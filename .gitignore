@@ -1,0 +1,9 @@
+.idea
+*idea*
+*temp*
+*__pycache__*
+runtime
+runlog*
+result*
+HIT*
+*.pyc
