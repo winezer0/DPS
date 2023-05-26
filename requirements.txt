@@ -1,0 +1,5 @@
+chardet~=3.0.4
+requests~=2.28.1
+loguru~=0.5.2
+argparse~=1.4.0
+pyfiglet~=0.8.post1
