@@ -17,7 +17,7 @@ GB_BASE_DIR = pathlib.Path(__file__).parent.resolve()
 GB_RUN_TIME = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
 ##################################################################
 # 版本号配置
-GB_VERSION = "Ver 0.0.3 2023-05-27 04:44"
+GB_VERSION = "Ver 0.0.4 2023-05-27 04:44"
 ##################################################################
 # 是否显示DEBUG级别信息,默认False
 GB_DEBUG_FLAG = False
@@ -90,6 +90,10 @@ GB_RESULT_DIR = GB_BASE_DIR.joinpath("result")
 # GB_RESULT_FILE_PATH = GB_RESULT_DIR.joinpath(f"result.{GB_RUN_TIME}.csv")
 GB_IGNORE_FILE_PATH = GB_RESULT_DIR.joinpath(f"ignore.csv")
 GB_RESULT_FILE_PATH = GB_RESULT_DIR.joinpath(f"result.csv")
+#######################################################################
+# 写入命中结果
+GB_SAVE_HIT_RESULT = True
+GB_HIT_PORT_FILE = GB_BASE_DIR.joinpath('HIT_PORT.hit')
 #######################################################################
 auto_make_dir(GB_RESULT_DIR)
 ########################扩展的调用函数###################################
