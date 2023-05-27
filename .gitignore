@@ -5,5 +5,5 @@
 runtime
 runlog*
 result*
-HIT*
 *.pyc
+test.txt

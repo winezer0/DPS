@@ -17,7 +17,7 @@ GB_BASE_DIR = pathlib.Path(__file__).parent.resolve()
 GB_RUN_TIME = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
 ##################################################################
 # 版本号配置
-GB_VERSION = "Ver 0.0.4 2023-05-27 04:44"
+GB_VERSION = "Ver 0.0.5 2023-05-27 14:00"
 ##################################################################
 # 是否显示DEBUG级别信息,默认False
 GB_DEBUG_FLAG = False
@@ -80,20 +80,18 @@ GB_DEBUG_LOG_STR = GB_LOG_FILE_FORMAT.replace('module', 'debug')
 GB_ERROR_LOG_STR = GB_LOG_FILE_FORMAT.replace('module', 'error')
 
 # # 记录扫描已完成的URL 针对每个目标生成不同的记录文件
-GB_HISTORY_FILE = GB_LOG_FILE_FORMAT.replace('module', 'history')
+GB_HISTORY_FORMAT = GB_LOG_FILE_FORMAT.replace('module', 'history.{host_port}')
 # # 每个HOST扫描URL的过滤,建议开启
 GB_HISTORY_EXCLUDE = True
 ##################################################################
 # 设置输出结果文件目录
 GB_RESULT_DIR = GB_BASE_DIR.joinpath("result")
-# GB_IGNORE_FILE_PATH = GB_RESULT_DIR.joinpath(f"ignore.{GB_RUN_TIME}.csv")
-# GB_RESULT_FILE_PATH = GB_RESULT_DIR.joinpath(f"result.{GB_RUN_TIME}.csv")
-GB_IGNORE_FILE_PATH = GB_RESULT_DIR.joinpath(f"ignore.csv")
-GB_RESULT_FILE_PATH = GB_RESULT_DIR.joinpath(f"result.csv")
+GB_IGNORE_FORMAT = str(GB_RESULT_DIR.joinpath("{host_port}.ignore.csv"))
+GB_RESULT_FORMAT = str(GB_RESULT_DIR.joinpath("{host_port}.result.csv"))
 #######################################################################
 # 写入命中结果
 GB_SAVE_HIT_RESULT = True
-GB_HIT_PORT_FILE = GB_BASE_DIR.joinpath('HIT_PORT.hit')
+GB_HIT_PORT_FILE = GB_BASE_DIR.joinpath('ports.hit')
 #######################################################################
 auto_make_dir(GB_RESULT_DIR)
 ########################扩展的调用函数###################################

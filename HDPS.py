@@ -13,61 +13,79 @@ from libs.lib_log_print.logger_printer import output, LOG_INFO, LOG_ERROR, set_l
 from libs.lib_requests.requests_const import HTTP_REQ_URL, HTTP_USER_AGENTS
 from libs.lib_requests.requests_thread import multi_thread_requests_url
 from libs.lib_requests.requests_tools import access_result_handle, random_useragent, random_x_forwarded_for
-from libs.utils import result_rule_classify, init_input_target
+from libs.utils import result_rule_classify, init_input_domain, init_input_ports, init_input_proto, gen_url_list, \
+    exclude_history_record
 from setting import *
 
 
 # 进行爆破任务
-def domain_port_scan(urls):
-    # 将任务列表拆分为多个任务列表 再逐步进行爆破,便于统一处理结果
-    task_size = GB_TASK_CHUNK_SIZE
-    brute_task_list = [urls[i:i + task_size] for i in range(0, len(urls), task_size)]
-    output(f"[*] 任务拆分 SIZE:[{task_size}] * NUM:[{len(brute_task_list)}]", level=LOG_INFO)
+def domain_port_scan(domain_list, port_list, proto_list):
+    for domain_index, domain in enumerate(domain_list):
+        output(f"[+] 任务进度 {domain_index + 1}/{len(domain_list)} {domain}", level=LOG_INFO)
 
-    # 循环多线程请求操作
-    for sub_task_index, sub_task_list in enumerate(brute_task_list):
-        output(f"[*] 任务进度 {sub_task_index + 1}/{len(brute_task_list)}", level=LOG_INFO)
-        result_dict_list = multi_thread_requests_url(task_list=sub_task_list,
-                                                     threads_count=GB_THREADS_COUNT,
-                                                     thread_sleep=GB_THREAD_SLEEP,
-                                                     # req_url,
-                                                     req_method=GB_REQ_METHOD,
-                                                     req_headers=REQ_HEADERS,
-                                                     req_data=GB_REQ_BODY,
-                                                     req_proxies=GB_PROXIES,
-                                                     req_timeout=GB_TIMEOUT,
-                                                     verify_ssl=GB_SSL_VERIFY,
-                                                     req_allow_redirects=GB_ALLOW_REDIRECTS,
-                                                     req_stream=GB_STREAM_MODE,
-                                                     retry_times=GB_RETRY_TIMES,
-                                                     const_sign=None,
-                                                     add_host_header=GB_ADD_DYNAMIC_HOST,
-                                                     add_refer_header=GB_ADD_DYNAMIC_REFER,
-                                                     ignore_encode_error=True
-                                                     )
+        # 相关文件路径
+        cur_history_file = GB_HISTORY_FORMAT.format(host_port=domain)
+        cur_ignore_file = GB_RESULT_FORMAT.format(host_port=domain)
+        cur_result_file = GB_IGNORE_FORMAT.format(host_port=domain)
 
-        # 处理响应结果
-        stop_run, hit_result_list = access_result_handle(result_dict_list=result_dict_list,
-                                                         dynamic_exclude_dict=None,
-                                                         ignore_file=GB_IGNORE_FILE_PATH,
-                                                         result_file=GB_RESULT_FILE_PATH,
-                                                         history_file=GB_HISTORY_FILE,
-                                                         access_fail_count=0,
-                                                         exclude_status_list=GB_EXCLUDE_STATUS,
-                                                         exclude_title_regexp=GB_EXCLUDE_REGEXP,
-                                                         max_error_num=None,
-                                                         hit_saving_field=HTTP_REQ_URL,
-                                                         history_field=HTTP_REQ_URL, )
-        # 记录已命中的端口号
-        if GB_SAVE_HIT_RESULT and hit_result_list:
-            # 分析命中的结果
-            hit_classify_dict = result_rule_classify(hit_str_list=hit_result_list,
-                                                     hit_port_file=GB_HIT_PORT_FILE)
-            # 将命中的结果分别写到不同的频率文件中
-            for file_name, path_list in hit_classify_dict.items():
-                auto_make_dir(os.path.dirname(file_name))
-                write_path_list_to_frequency_file(file_path=file_name, path_list=path_list)
-            output(f"[*] 记录命中结果规则: {len(hit_result_list)}", level=LOG_INFO)
+        # 组合扫描URL
+        url_list = gen_url_list(proto_list, [domain], port_list)
+
+        # 进行URL排除操作
+        if GB_HISTORY_EXCLUDE:
+            url_list = exclude_history_record(url_list, cur_history_file)
+            if not len(url_list):
+                continue
+
+        # 将任务列表拆分为多个任务列表 再逐步进行爆破,便于统一处理结果
+        task_size = GB_TASK_CHUNK_SIZE
+        brute_task_list = [url_list[i:i + task_size] for i in range(0, len(url_list), task_size)]
+        output(f"[*] 任务拆分 SIZE:[{task_size}] * NUM:[{len(brute_task_list)}]", level=LOG_INFO)
+
+        # 循环多线程请求操作
+        for sub_task_index, sub_task_list in enumerate(brute_task_list):
+            output(f"[*] 任务进度 {sub_task_index + 1}/{len(brute_task_list)}", level=LOG_INFO)
+            result_dict_list = multi_thread_requests_url(task_list=sub_task_list,
+                                                         threads_count=GB_THREADS_COUNT,
+                                                         thread_sleep=GB_THREAD_SLEEP,
+                                                         # req_url,
+                                                         req_method=GB_REQ_METHOD,
+                                                         req_headers=REQ_HEADERS,
+                                                         req_data=GB_REQ_BODY,
+                                                         req_proxies=GB_PROXIES,
+                                                         req_timeout=GB_TIMEOUT,
+                                                         verify_ssl=GB_SSL_VERIFY,
+                                                         req_allow_redirects=GB_ALLOW_REDIRECTS,
+                                                         req_stream=GB_STREAM_MODE,
+                                                         retry_times=GB_RETRY_TIMES,
+                                                         const_sign=domain,
+                                                         add_host_header=GB_ADD_DYNAMIC_HOST,
+                                                         add_refer_header=GB_ADD_DYNAMIC_REFER,
+                                                         ignore_encode_error=True
+                                                         )
+
+            # 处理响应结果
+            stop_run, hit_result_list = access_result_handle(result_dict_list=result_dict_list,
+                                                             dynamic_exclude_dict=None,
+                                                             ignore_file=cur_ignore_file,
+                                                             result_file=cur_result_file,
+                                                             history_file=cur_history_file,
+                                                             access_fail_count=0,
+                                                             exclude_status_list=GB_EXCLUDE_STATUS,
+                                                             exclude_title_regexp=GB_EXCLUDE_REGEXP,
+                                                             max_error_num=None,
+                                                             hit_saving_field=HTTP_REQ_URL,
+                                                             history_field=HTTP_REQ_URL, )
+            # 记录已命中的端口号
+            if GB_SAVE_HIT_RESULT and hit_result_list:
+                # 分析命中的结果
+                hit_classify_dict = result_rule_classify(hit_str_list=hit_result_list,
+                                                         hit_port_file=GB_HIT_PORT_FILE)
+                # 将命中的结果分别写到不同的频率文件中
+                for file_name, path_list in hit_classify_dict.items():
+                    auto_make_dir(os.path.dirname(file_name))
+                    write_path_list_to_frequency_file(file_path=file_name, path_list=path_list)
+                output(f"[*] 记录命中结果规则: {len(hit_result_list)}", level=LOG_INFO)
     output(f"[+] 所有URL测试完毕...", level=LOG_INFO)
 
 
@@ -181,21 +199,14 @@ if __name__ == "__main__":
     }
 
     # 对输入的目标数量进行处理
-    target_list = init_input_target(GB_TARGET, GB_PORTS, GB_PROTOS)
-
-    # 排除历史扫描记录
-    if GB_HISTORY_EXCLUDE:
-        if file_is_exist(GB_HISTORY_FILE):
-            accessed_url_list = read_file_to_list(file_path=GB_HISTORY_FILE, de_strip=True, de_weight=True,
-                                                  de_unprintable=False)
-            target_list = list(set(target_list) - set(accessed_url_list))
-            output(f"[*] 历史访问URL {len(accessed_url_list)}个", level=LOG_INFO)
-            output(f"[*] 剔除历史URL 剩余URL:{len(target_list)}个", level=LOG_INFO)
+    domains = init_input_domain(GB_TARGET)
+    ports = init_input_ports(GB_PORTS)
+    protos = init_input_proto(GB_PROTOS)
 
     # 对输入的目标数量进行判断
-    if len(target_list) == 0:
-        output("[-] 未输入任何有效目标或字典...", level=LOG_ERROR)
+    if len(domains) == 0 or len(ports) == 0 or len(protos) == 0:
+        output("[-] 未输入有效目标...TARGET:{GB_TARGET} PORTS:{GB_PORTS} PROTOS:{GB_PROTOS}", level=LOG_ERROR)
         exit()
 
     # 进行扫描任务
-    domain_port_scan(target_list)
+    domain_port_scan(domains, ports, protos)

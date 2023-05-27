@@ -26,9 +26,9 @@ def show_requests_error(url_info, common_error_list, module_name, error_info):
     # 把常规错误的关键字加入列表common_error_list内,列表为空时都作为非常规错误处理
     common_error_flag = list_ele_in_str(common_error_list, str(error_info), default=False)
     if common_error_flag:
-        output(f"[-] 当前目标 {url_info} COMMON ERROR ON Acquire [{module_name}]: [{error_info}]", level=LOG_ERROR)
+        output(f"[-] 当前目标 {url_info} COMMON ERROR ON Acquire [{module_name}]: [{error_info}]", level=LOG_DEBUG)
     else:
-        output(f"[-] 当前目标 {url_info} OTHERS ERROR ON Acquire [{module_name}]: [{error_info}]", level=LOG_ERROR)
+        output(f"[-] 当前目标 {url_info} OTHERS ERROR ON Acquire [{module_name}]: [{error_info}]", level=LOG_DEBUG)
 
 
 # 支持重试等操作的请求库
@@ -136,7 +136,7 @@ def requests_plus(req_url,
 
             else:
                 # 如果重试次数为小于0,返回固定结果-1
-                output(f"[-] 当前目标 {req_url}  剩余重试次数为0,返回固定结果,需要后续手动进行验证...", level=LOG_ERROR)
+                output(f"[-] 当前目标 {req_url}  剩余重试次数为0,返回固定结果,需要后续手动进行验证...", level=LOG_DEBUG)
     else:
         # 当获取到响应结果时,获取三个响应关键匹配项目
         #############################################################
