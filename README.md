@@ -5,10 +5,10 @@
 
 
 ```
-原理: 
-0 CDN下可以开放转发域名的多个端口
-1 输入 www.baidu.com 生成多个URL 如 https://www.baidu.com:8080 
-2 访问  https://www.baidu.com:8080  可以访问表明端口开放.
+原理:  CDN下可以开放转发域名的多个端口
+实现：
+      1 输入 www.baidu.com 生成多个URL 如 https://www.baidu.com:8080 
+      2 访问  https://www.baidu.com:8080  可以访问表明端口开放.
 
 python .\HDPS.py -h
 usage: HDPS.py [-h] [-u TARGET [TARGET ...]] [-p PORTS [PORTS ...]] [-P PROTOS [PROTOS ...]] [-x PROXIES] [-t THREADS_COUNT] [-d] [-ru] [-rx] [-ss] [-sh]
