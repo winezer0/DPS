@@ -27,13 +27,20 @@ def init_input_domain(input_target):
             if file_is_exist(target):
                 targets = read_file_to_list(file_path=target, de_strip=True, de_weight=True, de_unprintable=True)
             else:
-                if "://" not in target and ("\\" in target or "/" in target or str(target).endswith(".txt")):
-                    output(f"[!] 目标文件路径不存在 {target}", level=LOG_ERROR)
-                    exit()
-                else:
-                    targets.append(target)
+                targets.append(target)
+
+    # 如果用户输入的是url,就进行host提取
+    targets = [extract_host(target) if is_valid_url(target) else target for target in targets]
+
+    # 检查提取过后的域名格式是否正确
+    for target in targets:
+        if "\\" in target or "/" in target:
+            print(f"[*] 域名 [{target}] 输入错误或目标文件路径不存在!!!")
+            exit()
+
     #  去重输入目标
     targets = list(dict.fromkeys(targets))
+
     return targets
 
 
@@ -109,3 +116,14 @@ def exclude_history_record(target_list, history_file):
         output(f"[*] 历史访问URL: {len(accessed_url_list)}个", level=LOG_INFO)
         output(f"[*] 剔除剩余URL: {len(target_list)}个", level=LOG_INFO)
     return target_list
+
+
+def extract_host(url):
+    parsed_url = urlparse(url)
+    host = parsed_url.hostname
+    return host
+
+
+def is_valid_url(target):
+    parsed_url = urlparse(target)
+    return parsed_url.scheme != '' and parsed_url.netloc != ''
