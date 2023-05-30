@@ -17,7 +17,7 @@ GB_BASE_DIR = pathlib.Path(__file__).parent.resolve()
 GB_RUN_TIME = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
 ##################################################################
 # 版本号配置
-GB_VERSION = "Ver 0.0.5 2023-05-27 14:00"
+GB_VERSION = "Ver 0.0.5 2023-05-30 19:11"
 ##################################################################
 # 是否显示DEBUG级别信息,默认False
 GB_DEBUG_FLAG = False
