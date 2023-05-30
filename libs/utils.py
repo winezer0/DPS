@@ -59,27 +59,38 @@ def init_input_ports(input_ports):
 
     def parse_input_ports(port_str_list):
         # 解析输入的端口字符串列表
-        port_list = []
+        port_list_one = []
+
+        # 读取其中的文件信息
         for port_str in port_str_list:
             if file_is_exist(port_str):
                 lists = read_file_to_list(file_path=port_str, de_strip=True, de_weight=True, de_unprintable=True)
-                port_list.extend(lists)
+                port_list_one.extend(lists)
             else:
-                if ',' in str(port_str):
-                    output(f"[!] 错误输入{port_str} Ports不支持逗号,请使用[空格]和[-]限定范围! 如:8080 80-443", level=LOG_ERROR)
-                    exit()
-                elif '-' in str(port_str):
-                    port_start = int(port_str.split("-")[0].strip())
-                    port_end = int(port_str.split("-")[1].strip())
-                    if port_end < port_start:
-                        output(f'[!] 端口 {port_str} 范围格式输入错误,后部范围小于前部范围!!!', level=LOG_ERROR)
-                        print('')
-                        sys.exit()
-                    else:
-                        for gen_port in range(port_start, port_end + 1):
-                            port_list.append(gen_port)
+                port_list_one.append(port_str)
+
+        # 进行格式解析
+        port_list = []
+        for port_str in port_list_one:
+            if ',' in str(port_str):
+                output(f"[!] 错误输入{port_str} Ports不支持逗号,请使用[空格]和[-]限定范围! 如:8080 80-443", level=LOG_ERROR)
+                exit()
+            elif '-' in str(port_str):
+                port_start = int(port_str.split("-")[0].strip())
+                port_end = int(port_str.split("-")[1].strip())
+                if port_end < port_start:
+                    output(f'[!] 端口 {port_str} 范围格式输入错误,后部范围小于前部范围!!!', level=LOG_ERROR)
+                    print('')
+                    sys.exit()
                 else:
-                    port_list.append(port_str)
+                    for gen_port in range(port_start, port_end + 1):
+                        port_list.append(gen_port)
+            else:
+                port_list.append(port_str)
+
+        # 进行数据去重
+        port_list = [str(port) for port in port_list]
+        port_list = list(dict.fromkeys(port_list))
         return port_list
 
     if isinstance(input_ports, str):
@@ -89,8 +100,6 @@ def init_input_ports(input_ports):
         parse_ports = parse_input_ports(input_ports)
         ports.extend(parse_ports)
 
-    # 去重输入端口
-    ports = list(dict.fromkeys(ports))
     return ports
 
 
