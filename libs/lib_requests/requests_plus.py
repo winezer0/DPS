@@ -6,7 +6,7 @@ import sys
 import time
 import urllib
 from binascii import b2a_hex
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urljoin
 
 import chardet
 import requests
@@ -28,7 +28,7 @@ def show_requests_error(url_info, common_error_list, module_name, error_info):
     if common_error_flag:
         output(f"[-] 当前目标 {url_info} COMMON ERROR ON Acquire [{module_name}]: [{error_info}]", level=LOG_DEBUG)
     else:
-        output(f"[-] 当前目标 {url_info} OTHERS ERROR ON Acquire [{module_name}]: [{error_info}]", level=LOG_DEBUG)
+        output(f"[-] 当前目标 {url_info} OTHERS ERROR ON Acquire [{module_name}]: [{error_info}]", level=LOG_ERROR)
 
 
 # 支持重试等操作的请求库
@@ -60,7 +60,7 @@ def requests_plus(req_url,
 
     # 需要动态添加refer字段
     if add_refer_header:
-        req_headers["Referer"] = req_url
+        req_headers["Referer"] = urljoin(req_url, "./")
 
     # 设置需要接受的参数的默认值 #如果返回结果是默认值,说明程序异常没有获取到
     resp_status = HTTP_DEFAULT_RESP_DICT[HTTP_RESP_STATUS]  # 响应状态码 赋值默认值 NUM_MINUS
