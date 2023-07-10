@@ -3,7 +3,7 @@
 
 # 全局配置文件
 
-from libs.input_const import *
+from libs.lib_args.input_const import *
 
 
 def init_custom(config):

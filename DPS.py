@@ -5,8 +5,9 @@ import os
 
 import setting_com
 import setting_http
-from libs.input_const import *
-from libs.input_parse import args_parser, args_dict_handle, config_dict_add_args, config_dict_handle
+from libs.lib_args.input_const import *
+from libs.lib_args.input_parse import args_parser, args_dict_handle, config_dict_handle
+from libs.lib_args.input_basic import config_dict_add_args
 from libs.lib_attribdict.config import CONFIG
 from libs.lib_file_operate.file_path import auto_make_dir
 from libs.lib_file_operate.file_write import write_path_list_to_frequency_file
