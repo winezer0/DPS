@@ -23,7 +23,7 @@ def init_common(config):
     config[GB_RUN_TIME] = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
     ##################################################################
     # 版本号配置
-    config[GB_VERSION] = "Ver 0.0.8 2023-07-11 08:00"
+    config[GB_VERSION] = "Ver 0.0.8 2023-07-17 23:00"
     ##################################################################
     # 是否显示DEBUG级别信息,默认False
     config[GB_DEBUG_FLAG] = False

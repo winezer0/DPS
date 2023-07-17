@@ -26,7 +26,7 @@ def args_parser(config_dict):
         {"param": GB_PORTS, "nargs": "+", "help": f"Specify the ports list or ports File"},
 
         # 指定扫描的协议类型
-        {"param": GB_PROTOS, "help": f"Specify the proto list or proto string"},
+        {"param": GB_PROTOS, "nargs": "+", "help": f"Specify the proto list or proto string"},
 
         # 开启调试功能
         {"param": GB_DEBUG_FLAG, "action": "store_true", "help": "Specifies Display Debug Info"},
@@ -73,10 +73,10 @@ def args_parser(config_dict):
     argument_parser.epilog = f"""Examples:
 
              \r  批量扫描 target.txt
-             \r  python3 {shell_name} --{param_dict[GB_TARGET]} target.txt
+             \r  python3 {shell_name} -{param_dict[GB_TARGET]} target.txt
 
              \r  指定扫描 baidu.com
-             \r  python3 {shell_name} --{param_dict[GB_TARGET]} www.baidu.com
+             \r  python3 {shell_name} -{param_dict[GB_TARGET]} www.baidu.com
 
              \r  其他控制细节参数可通过setting_***.py进行配置
              \r

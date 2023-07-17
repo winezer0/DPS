@@ -15,7 +15,7 @@ def init_custom(config):
     ##################################################################
     # HTTP请求相关配置
     # 默认请求协议
-    config[GB_PROTOS] = ["http"] # ["http", "https"]
+    config[GB_PROTOS] = ["http", "https"]
     # 默认请求方法
     config[GB_REQ_METHOD] = "get"
     # 默认请求数据
