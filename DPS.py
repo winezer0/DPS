@@ -25,10 +25,11 @@ def actions_controller(config_dict):
     domain_list = init_input_domain(config_dict[GB_TARGET])
     port_list = init_input_ports(config_dict[GB_PORTS])
     proto_list = init_input_proto(config_dict[GB_PROTOS])
+    output(f"[*] NUM INFO TARGET:{len(domain_list)} PORTS:{len(port_list)} PROTOS:{len(proto_list)}", level=LOG_INFO)
 
     # 对输入的目标数量进行判断
     if not domain_list or not port_list or not proto_list:
-        output("[-] 未输入有效目标...TARGET:{GB_TARGET} PORTS:{GB_PORTS} PROTOS:{GB_PROTOS}", level=LOG_ERROR)
+        output(f"[-] 未输入有效目标...TARGET:{domain_list} PORTS:{port_list} PROTOS:{proto_list}", level=LOG_ERROR)
         exit()
 
     for domain_index, domain in enumerate(domain_list):

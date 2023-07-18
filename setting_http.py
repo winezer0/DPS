@@ -34,7 +34,7 @@ def init_custom(config):
     # 是否开启https服务器的证书校验
     config[GB_SSL_VERIFY] = False
     # 超时时间 # URL重定向会严重影响程序的运行时间
-    config[GB_TIME_OUT] = 10
+    config[GB_TIME_OUT] = 5
     # 是否允许URL重定向 # URL重定向会严重影响程序的运行时间
     config[GB_ALLOW_REDIRECTS] = False
     # 访问没有结果时,自动重试的最大次数

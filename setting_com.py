@@ -34,7 +34,7 @@ def init_common(config):
     config[GB_LOG_ERROR_FILE] = config[GB_BASE_DIR].joinpath("runtime", "runtime_error.log").as_posix()
     ##################################################################
     # 记录扫描已完成的URL 针对每个目标生成不同的记录文件
-    config[GB_HISTORY_FORMAT] = config[GB_BASE_DIR].joinpath("runtime", 'history.{host_port}').as_posix()
+    config[GB_HISTORY_FORMAT] = config[GB_BASE_DIR].joinpath("runtime", 'history.{host_port}.log').as_posix()
     # # 每个HOST扫描URL的过滤,建议开启
     config[GB_EXCLUDE_HISTORY] = True
     ##################################################################
@@ -62,7 +62,7 @@ def init_custom(config):
     # 每个线程之间的延迟 单位S秒
     config[GB_THREAD_SLEEP] = 0
     # 任务分块大小 所有任务会被分为多个列表
-    config[GB_TASK_CHUNK_SIZE] = 200
+    config[GB_TASK_CHUNK_SIZE] = 2000
     ##################################################################
     # 写入命中结果
     config[GB_SAVE_HIT_RESULT] = True
