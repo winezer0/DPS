@@ -36,7 +36,7 @@ def init_custom(config):
     # 超时时间 # URL重定向会严重影响程序的运行时间
     config[GB_TIME_OUT] = 5
     # 是否允许URL重定向 # URL重定向会严重影响程序的运行时间
-    config[GB_ALLOW_REDIRECTS] = False
+    config[GB_ALLOW_REDIRECTS] = True
     # 访问没有结果时,自动重试的最大次数
     config[GB_RETRY_TIMES] = 0
     ##################################################################
