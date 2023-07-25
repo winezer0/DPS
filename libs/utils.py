@@ -1,7 +1,7 @@
 import itertools
 import sys
 
-from libs.lib_file_operate.file_path import file_is_exist
+from libs.lib_file_operate.file_utils import file_is_exist
 from libs.lib_file_operate.file_read import read_file_to_list
 from libs.lib_log_print.logger_printer import output, LOG_ERROR, LOG_INFO
 from urllib.parse import urlparse
@@ -114,17 +114,6 @@ def gen_url_list(proto_list, domain_list, port_list):
     #  去重URL结果参数
     gen_urls = list(dict.fromkeys(gen_urls))
     return gen_urls
-
-
-def exclude_history_record(target_list, history_file):
-    # 排除历史扫描记录
-    if file_is_exist(history_file):
-        output(f"[*] 输入目标URL: {len(target_list)}个", level=LOG_INFO)
-        accessed_url_list = read_file_to_list(file_path=history_file, de_weight=True, de_unprintable=False)
-        target_list = list(set(target_list) - set(accessed_url_list))
-        output(f"[*] 历史访问URL: {len(accessed_url_list)}个", level=LOG_INFO)
-        output(f"[*] 剔除剩余URL: {len(target_list)}个", level=LOG_INFO)
-    return target_list
 
 
 def extract_host(url):

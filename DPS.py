@@ -9,14 +9,13 @@ from libs.lib_args.input_const import *
 from libs.lib_args.input_parse import args_parser, args_dict_handle, config_dict_handle
 from libs.lib_args.input_basic import config_dict_add_args
 from libs.lib_attribdict.config import CONFIG
-from libs.lib_file_operate.file_path import auto_make_dir
-from libs.lib_file_operate.file_write import write_path_list_to_frequency_file
+from libs.lib_file_operate.file_utils import exclude_history_files, auto_make_dir
+from libs.lib_file_operate.rw_freq_file import write_list_to_freq_file
 from libs.lib_log_print.logger_printer import output, LOG_INFO, set_logger, LOG_ERROR
 from libs.lib_requests.requests_const import HTTP_REQ_URL
 from libs.lib_requests.requests_thread import multi_thread_requests_url
 from libs.lib_requests.requests_tools import access_result_handle
-from libs.utils import result_rule_classify, gen_url_list, \
-    exclude_history_record, init_input_domain, init_input_ports, init_input_proto
+from libs.utils import init_input_domain, init_input_ports, init_input_proto, gen_url_list, result_rule_classify
 
 
 # 进行爆破任务
@@ -45,7 +44,7 @@ def actions_controller(config_dict):
 
         # 进行URL排除操作
         if config_dict[GB_EXCLUDE_HISTORY]:
-            url_list = exclude_history_record(url_list, cur_history_file)
+            url_list = exclude_history_files(url_list, cur_history_file)
             if not len(url_list):
                 continue
 
@@ -96,7 +95,7 @@ def actions_controller(config_dict):
                 # 将命中的结果分别写到不同的频率文件中
                 for file_name, path_list in hit_classify_dict.items():
                     auto_make_dir(os.path.dirname(file_name))
-                    write_path_list_to_frequency_file(file_path=file_name, path_list=path_list)
+                    write_list_to_freq_file(file_path=file_name, path_list=path_list)
                 output(f"[*] 记录命中结果规则: {len(hit_result_list)}", level=LOG_INFO)
     output(f"[+] 所有URL测试完毕...", level=LOG_INFO)
 
