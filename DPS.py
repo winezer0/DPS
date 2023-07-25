@@ -12,9 +12,9 @@ from libs.lib_attribdict.config import CONFIG
 from libs.lib_file_operate.file_utils import exclude_history_files, auto_make_dir
 from libs.lib_file_operate.rw_freq_file import write_list_to_freq_file
 from libs.lib_log_print.logger_printer import output, LOG_INFO, set_logger, LOG_ERROR
-from libs.lib_requests.requests_const import HTTP_REQ_URL
+from libs.lib_requests.requests_const import HTTP_REQ_TARGET
 from libs.lib_requests.requests_thread import multi_thread_requests_url
-from libs.lib_requests.requests_tools import access_result_handle
+from libs.lib_requests.requests_utils import access_result_handle
 from libs.utils import init_input_domain, init_input_ports, init_input_proto, gen_url_list, result_rule_classify
 
 
@@ -85,8 +85,8 @@ def actions_controller(config_dict):
                                                              exclude_status_list=config_dict[GB_EXCLUDE_STATUS],
                                                              exclude_title_regexp=config_dict[GB_EXCLUDE_REGEXP],
                                                              max_error_num=None,
-                                                             hit_saving_field=HTTP_REQ_URL,
-                                                             history_field=HTTP_REQ_URL, )
+                                                             hit_saving_field=HTTP_REQ_TARGET,
+                                                             history_field=HTTP_REQ_TARGET, )
             # 记录已命中的端口号
             if config_dict[GB_SAVE_HIT_RESULT] and hit_result_list:
                 # 分析命中的结果

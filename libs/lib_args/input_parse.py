@@ -6,7 +6,7 @@ from libs.lib_args.input_basic import extract_heads
 from libs.lib_args.input_const import *
 from libs.lib_log_print.logger_printer import LOG_ERROR, output
 from libs.lib_requests.requests_const import HTTP_USER_AGENTS
-from libs.lib_requests.requests_tools import random_useragent, random_x_forwarded_for
+from libs.lib_requests.requests_utils import random_useragent, random_x_forwarded_for
 
 
 def args_parser(config_dict):
