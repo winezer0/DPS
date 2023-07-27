@@ -13,7 +13,7 @@ from libs.lib_file_operate.file_utils import exclude_history_files, auto_make_di
 from libs.lib_file_operate.rw_freq_file import write_list_to_freq_file
 from libs.lib_log_print.logger_printer import output, LOG_INFO, set_logger, LOG_ERROR
 from libs.lib_requests.requests_const import HTTP_REQ_TARGET
-from libs.lib_requests.requests_thread import multi_thread_requests_url
+from libs.lib_requests.requests_thread import multi_thread_requests
 from libs.lib_requests.requests_utils import access_result_handle
 from libs.utils import init_input_domain, init_input_ports, init_input_proto, gen_url_list, result_rule_classify
 
@@ -56,24 +56,24 @@ def actions_controller(config_dict):
         # 循环多线程请求操作
         for sub_task_index, sub_task_list in enumerate(brute_task_list):
             output(f"[*] 任务进度 {sub_task_index + 1}/{len(brute_task_list)}", level=LOG_INFO)
-            result_dict_list = multi_thread_requests_url(task_list=sub_task_list,
-                                                         threads_count=config_dict[GB_THREADS_COUNT],
-                                                         thread_sleep=config_dict[GB_THREAD_SLEEP],
-                                                         # req_url,
-                                                         req_method=config_dict[GB_REQ_METHOD],
-                                                         req_headers=config_dict[GB_REQ_HEADERS],
-                                                         req_data=config_dict[GB_REQ_BODY],
-                                                         req_proxies=config_dict[GB_PROXIES],
-                                                         req_timeout=config_dict[GB_TIME_OUT],
-                                                         verify_ssl=config_dict[GB_SSL_VERIFY],
-                                                         req_allow_redirects=config_dict[GB_ALLOW_REDIRECTS],
-                                                         req_stream=config_dict[GB_STREAM_MODE],
-                                                         retry_times=config_dict[GB_RETRY_TIMES],
-                                                         const_sign=domain,
-                                                         add_host_header=config_dict[GB_DYNA_REQ_HOST],
-                                                         add_refer_header=config_dict[GB_DYNA_REQ_REFER],
-                                                         ignore_encode_error=True
-                                                         )
+            result_dict_list = multi_thread_requests(task_list=sub_task_list,
+                                                     threads_count=config_dict[GB_THREADS_COUNT],
+                                                     thread_sleep=config_dict[GB_THREAD_SLEEP],
+                                                     # req_url,
+                                                     req_method=config_dict[GB_REQ_METHOD],
+                                                     req_headers=config_dict[GB_REQ_HEADERS],
+                                                     req_data=config_dict[GB_REQ_BODY],
+                                                     req_proxies=config_dict[GB_PROXIES],
+                                                     req_timeout=config_dict[GB_TIME_OUT],
+                                                     verify_ssl=config_dict[GB_SSL_VERIFY],
+                                                     req_allow_redirects=config_dict[GB_ALLOW_REDIRECTS],
+                                                     req_stream=config_dict[GB_STREAM_MODE],
+                                                     retry_times=config_dict[GB_RETRY_TIMES],
+                                                     const_sign=domain,
+                                                     add_host_header=config_dict[GB_DYNA_REQ_HOST],
+                                                     add_refer_header=config_dict[GB_DYNA_REQ_REFER],
+                                                     ignore_encode_error=True
+                                                     )
 
             # 处理响应结果
             stop_run, hit_result_list = access_result_handle(result_dict_list=result_dict_list,
