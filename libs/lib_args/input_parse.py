@@ -6,8 +6,8 @@ import argparse
 from pyfiglet import Figlet
 
 from libs.lib_args.input_basic import extract_heads
+from libs.lib_log_print.logger_printer import *
 from libs.lib_args.input_const import *
-from libs.lib_log_print.logger_printer import LOG_ERROR, output
 from libs.lib_requests.requests_const import HTTP_USER_AGENTS
 from libs.lib_requests.requests_utils import random_useragent, random_x_forwarded_for
 
@@ -152,7 +152,7 @@ def options_to_argument(args_options, argument_parser, config_dict, param_dict):
 
                 # 存储长短参数对应关系
                 param_dict[gb_param] = tmp_name
-                # 开始添加参数信息
+
                 if tmp_action:
                     argument_parser.add_argument(f"-{tmp_name.strip('-')}",
                                                  f"--{tmp_dest.strip('-')}",

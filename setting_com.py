@@ -34,7 +34,7 @@ def init_common(config):
     config[GB_LOG_ERROR_FILE] = config[GB_BASE_DIR].joinpath("runtime", "runtime_error.log").as_posix()
     ##################################################################
     # 记录扫描已完成的URL 针对每个目标生成不同的记录文件
-    config[GB_HISTORY_FORMAT] = config[GB_BASE_DIR].joinpath("runtime", '{host_port}history..log').as_posix()
+    config[GB_HISTORY_FORMAT] = config[GB_BASE_DIR].joinpath("runtime", '{host_port}.history.log').as_posix()
     # # 每个HOST扫描URL的过滤,建议开启
     config[GB_EXCLUDE_HISTORY] = True
     ##################################################################
