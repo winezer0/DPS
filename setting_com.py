@@ -39,8 +39,8 @@ def init_common(config):
     config[GB_EXCLUDE_HISTORY] = True
     ##################################################################
     # 设置输出结果文件目录
-    config[GB_IGNORE_FORMAT] = config[GB_RESULT_DIR].joinpath("result","{host_port}.ignore.csv").as_posix()
-    config[GB_RESULT_FORMAT] = config[GB_RESULT_DIR].joinpath("result","{host_port}.result.csv").as_posix()
+    config[GB_IGNORE_FORMAT] = config[GB_BASE_DIR].joinpath("result","{host_port}.ignore.csv").as_posix()
+    config[GB_RESULT_FORMAT] = config[GB_BASE_DIR].joinpath("result","{host_port}.result.csv").as_posix()
     ##################################################################
 
 

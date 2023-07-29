@@ -54,5 +54,5 @@ def init_custom(config):
     # 排除指定结果
     # 判断URI不存在的状态码，多个以逗号隔开,符合该状态码的响应将不会写入结果文件
     config[GB_EXCLUDE_STATUS] = [502, 400]
-    # 判断URI是否不存在的正则，如果页面标题存在如下定义的内容，将从Result结果中剔除到ignore结果中 #re.IGNORECASE 忽略大小写
+    # 判断URI是否不存在的正则，如果页面标题存在如下定义的内容，将从Result结果中剔除到ignore结果中 #re.I 忽略大小写
     config[GB_EXCLUDE_REGEXP] = None  # r"页面不存在|未找到|not[ -]found|403|404|410"
