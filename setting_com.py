@@ -23,7 +23,7 @@ def init_common(config):
     config[GB_RUN_TIME] = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
     ##################################################################
     # 版本号配置
-    config[GB_VERSION] = "Ver 0.1.2 2023-07-28 17:30"
+    config[GB_VERSION] = "Ver 0.1.3 2023-07-29 08:00"
     ##################################################################
     # 是否显示DEBUG级别信息,默认False
     config[GB_DEBUG_FLAG] = False
@@ -58,11 +58,11 @@ def init_custom(config):
     config[GB_PORTS] = "ports.txt"
     ##################################################################
     # 默认线程数
-    config[GB_THREADS_COUNT] = 1000
+    config[GB_THREADS_COUNT] = 200
     # 每个线程之间的延迟 单位S秒
     config[GB_THREAD_SLEEP] = 0
     # 任务分块大小 所有任务会被分为多个列表
-    config[GB_TASK_CHUNK_SIZE] = 10000
+    config[GB_TASK_CHUNK_SIZE] = 200
     ##################################################################
     # 写入命中结果
     config[GB_SAVE_HIT_RESULT] = True
