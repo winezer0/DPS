@@ -31,6 +31,9 @@ def args_parser(config_dict):
         # 指定扫描的协议类型
         {"param": GB_PROTOS, "nargs": "+", "help": f"Specify the proto list or proto string"},
 
+        # 指定扫描的端口号
+        {"param": GB_ALL_2_HOST, "action": "store_true", "help": f"Specify the Wild  Port Scan Mode"},
+
         # 开启调试功能
         {"param": GB_DEBUG_FLAG, "action": "store_true", "help": "Specifies Display Debug Info"},
 
@@ -40,14 +43,14 @@ def args_parser(config_dict):
         # 指定请求线程数量
         {"param": GB_THREADS_COUNT, "type": int, "help": "Specifies request threads"},
 
-        # 开启随机UA
-        {"param": GB_RANDOM_UA, "action": "store_true", "help": "Specifies Start Random UA Header"},
-
-        # 开启随机XFF
-        {"param": GB_RANDOM_XFF, "action": "store_true", "help": "Specifies Start Random XFF Header"},
-
-        # 关闭流模式扫描
-        {"param": GB_STREAM_MODE, "action": "store_false", "help": "Shutdown Request Stream Mode"},
+        # # 开启随机UA
+        # {"param": GB_RANDOM_UA, "action": "store_true", "help": "Specifies Start Random UA Header"},
+        #
+        # # 开启随机XFF
+        # {"param": GB_RANDOM_XFF, "action": "store_true", "help": "Specifies Start Random XFF Header"},
+        #
+        # # 关闭流模式扫描
+        # {"param": GB_STREAM_MODE, "action": "store_false", "help": "Shutdown Request Stream Mode"},
 
         # 关闭历史扫描URL过滤 GB_EXCLUDE_HISTORY
         {"param": GB_EXCLUDE_HISTORY, "action": "store_false", "help": "Specifies Start Random XFF Header"},
@@ -58,14 +61,14 @@ def args_parser(config_dict):
         # 排除匹配指定正则 响应结果
         {"param": GB_EXCLUDE_REGEXP, "help": "Specified RE String When response matches the Str Excluded"},
 
-        # 指定默认请求方法
-        {"param": GB_REQ_METHOD, "help": "Specifies request method"},
-
+        # # 指定默认请求方法
+        # {"param": GB_REQ_METHOD, "help": "Specifies request method"},
+        #
         #  指定请求超时时间
         {"param": GB_TIME_OUT, "type": int, "help": "Specifies request timeout"},
 
-        # 指定自动错误重试次数
-        {"param": GB_RETRY_TIMES, "type": int, "help": "Specifies request retry times"},
+        # # 指定自动错误重试次数
+        # {"param": GB_RETRY_TIMES, "type": int, "help": "Specifies request retry times"},
     ]
 
     param_dict = {"help": "h"}  # 存储所有长-短 参数对应关系,用于自动处理重复的短参数名 # 先把help加入进去

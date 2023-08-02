@@ -2,129 +2,72 @@
 # encoding: utf-8
 
 import itertools
-import sys
-
-from libs.lib_file_operate.file_utils import file_is_exist
-from libs.lib_file_operate.file_read import read_file_to_list
-from libs.lib_log_print.logger_printer import output, LOG_ERROR, LOG_INFO
 from urllib.parse import urlparse
+
+from libs.lib_args.input_const import *
+from libs.lib_input_format.format_hosts import extract_host_from_host, remove_80_443, extract_host_from_url, \
+    classify_hosts
+from libs.lib_input_format.format_input import load_targets
+from libs.lib_input_format.format_ports import parse_ports
+
+
+def initialize_urls(config_dict, remove_common_port=True):
+    protos = load_targets(config_dict[GB_PROTOS])
+
+    ports = load_targets(config_dict[GB_PORTS])
+    ports = parse_ports(ports)
+
+    targets = load_targets(config_dict[GB_TARGET])
+    list_proto_host_port, list_host_port, list_ipv4, list_host = classify_hosts(targets)
+    urls = []
+    if config_dict[GB_ALL_2_HOST]:
+        hosts = []
+        hosts.extend(list_ipv4)
+        hosts.extend(list_host)
+        hosts.extend([extract_host_from_host(host_port) for host_port in list_host_port])
+        hosts.extend([extract_host_from_url(proto_host_port) for proto_host_port in list_proto_host_port])
+        hosts = list(dict.fromkeys(hosts))
+        urls = group_proto_host_port(protos=protos, hosts=hosts, ports=ports)
+    else:
+        urls.extend(group_proto_host_port(protos=protos, hosts=list_ipv4, ports=ports))
+        urls.extend(group_proto_host_port(protos=protos, hosts=list_host, ports=ports))
+        urls.extend(group_proto_host(protos=protos, hosts=list_host_port))
+        urls.extend(list_proto_host_port)
+
+    if remove_common_port:
+        urls = [remove_80_443(url) for url in urls]
+
+    urls = list(dict.fromkeys(urls))
+    return urls
+
+
+def group_proto_host_port(protos, hosts, ports):
+    # 组合协议、域名、端口
+    urls = []
+    if protos and hosts and ports:
+        group = list(itertools.product(protos, hosts, ports))
+        urls = [f"{proto}://{host}:{port}" for proto, host, port in group]
+        urls = list(dict.fromkeys(urls))
+    return urls
+
+
+def group_proto_host(protos, hosts):
+    # 组合协议、域名
+    urls = []
+    if protos and hosts:
+        group = list(itertools.product(protos, hosts))
+        urls = [f"{proto}://{host}" for proto, host in group]
+        urls = list(dict.fromkeys(urls))
+    return urls
 
 
 def result_rule_classify(hit_str_list, hit_port_file):
     # 分析扫描结果
     hit_classify = {hit_port_file: []}
     for url in hit_str_list:
-        port = urlparse(url).port
+        parsed_url = urlparse(url)
+        port = parsed_url.port
+        if port is None:
+            port = 443 if parsed_url.scheme == 'https' else 80
         hit_classify[hit_port_file].append(port)
     return hit_classify
-
-
-def init_input_domain(input_target):
-    # 读取用户输入的URL和目标文件参数
-    if isinstance(input_target, str):
-        input_target = [input_target]
-
-    targets = []
-    if isinstance(input_target, list):
-        for target in input_target:
-            if file_is_exist(target):
-                targets = read_file_to_list(file_path=target, de_strip=True, de_weight=True, de_unprintable=True)
-            else:
-                targets.append(target)
-
-    # 如果用户输入的是url,就进行host提取
-    targets = [extract_host(target) if is_valid_url(target) else target for target in targets]
-
-    # 检查提取过后的域名格式是否正确
-    for target in targets:
-        if "\\" in target or "/" in target:
-            print(f"[*] 域名 [{target}] 输入错误或目标文件路径不存在!!!")
-            exit()
-
-    #  去重输入目标
-    targets = list(dict.fromkeys(targets))
-
-    return targets
-
-
-def init_input_proto(input_proto):
-    # 解析请求协议参数
-    if isinstance(input_proto, str):
-        input_proto = [input_proto]
-    #  去重协议参数
-    input_proto = list(dict.fromkeys(input_proto))
-    return input_proto
-
-
-def init_input_ports(input_ports):
-    # 初始化输入端口
-    ports = []
-
-    def parse_input_ports(port_str_list):
-        # 解析输入的端口字符串列表
-        port_list_one = []
-
-        # 读取其中的文件信息
-        for port_str in port_str_list:
-            if file_is_exist(port_str):
-                lists = read_file_to_list(file_path=port_str, de_strip=True, de_weight=True, de_unprintable=True)
-                port_list_one.extend(lists)
-            else:
-                port_list_one.append(port_str)
-
-        # 进行格式解析
-        port_list = []
-        for port_str in port_list_one:
-            if ',' in str(port_str):
-                output(f"[!] 错误输入{port_str} Ports不支持逗号,请使用[空格]和[-]限定范围! 如:8080 80-443", level=LOG_ERROR)
-                exit()
-            elif '-' in str(port_str):
-                port_start = int(port_str.split("-")[0].strip())
-                port_end = int(port_str.split("-")[1].strip())
-                if port_end < port_start:
-                    output(f'[!] 端口 {port_str} 范围格式输入错误,后部范围小于前部范围!!!', level=LOG_ERROR)
-                    print('')
-                    sys.exit()
-                else:
-                    for gen_port in range(port_start, port_end + 1):
-                        port_list.append(gen_port)
-            else:
-                port_list.append(port_str)
-
-        # 进行数据去重
-        port_list = [str(port) for port in port_list]
-        port_list = list(dict.fromkeys(port_list))
-        return port_list
-
-    if isinstance(input_ports, str):
-        input_ports = [input_ports]
-
-    if isinstance(input_ports, list):
-        parse_ports = parse_input_ports(input_ports)
-        ports.extend(parse_ports)
-
-    return ports
-
-
-def gen_url_list(proto_list, domain_list, port_list):
-    # 组合协议、域名、端口
-    gen_urls = []
-    combinations = list(itertools.product(proto_list, domain_list, port_list))
-    for proto_, domain_, port_ in combinations:
-        url = f"{proto_}://{domain_}:{port_}"
-        gen_urls.append(url)
-
-    #  去重URL结果参数
-    gen_urls = list(dict.fromkeys(gen_urls))
-    return gen_urls
-
-
-def extract_host(url):
-    parsed_url = urlparse(url)
-    host = parsed_url.hostname
-    return host
-
-
-def is_valid_url(target):
-    parsed_url = urlparse(target)
-    return parsed_url.scheme != '' and parsed_url.netloc != ''

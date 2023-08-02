@@ -23,7 +23,7 @@ def init_common(config):
     config[GB_RUN_TIME] = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
     ##################################################################
     # 版本号配置
-    config[GB_VERSION] = "Ver 0.1.4 2023-07-31 12:30"
+    config[GB_VERSION] = "Ver 0.2.0 2023-8-03 01:30"
     ##################################################################
     # 是否显示DEBUG级别信息,默认False
     config[GB_DEBUG_FLAG] = False
@@ -33,15 +33,20 @@ def init_common(config):
     config[GB_LOG_DEBUG_FILE] = config[GB_BASE_DIR].joinpath("runtime", "runtime_debug.log").as_posix()
     config[GB_LOG_ERROR_FILE] = config[GB_BASE_DIR].joinpath("runtime", "runtime_error.log").as_posix()
     ##################################################################
-    # 记录扫描已完成的URL 针对每个目标生成不同的记录文件
-    config[GB_HISTORY_FORMAT] = config[GB_BASE_DIR].joinpath("runtime", '{host_port}.history.log').as_posix()
-    # # 每个HOST扫描URL的过滤,建议开启
-    config[GB_EXCLUDE_HISTORY] = True
-    ##################################################################
     # 设置输出结果文件目录
-    config[GB_IGNORE_FORMAT] = config[GB_BASE_DIR].joinpath("result","{host_port}.ignore.csv").as_posix()
-    config[GB_RESULT_FORMAT] = config[GB_BASE_DIR].joinpath("result","{host_port}.result.csv").as_posix()
+    config[GB_IGNORE_FORMAT] = config[GB_BASE_DIR].joinpath("result", "{mark}.ignore.csv").as_posix()
+    config[GB_RESULT_FORMAT] = config[GB_BASE_DIR].joinpath("result", "{mark}.result.csv").as_posix()
+    # 记录扫描已完成的URL 针对每个目标生成不同的记录文件
+    config[GB_HISTORY_FORMAT] = config[GB_BASE_DIR].joinpath("result", '{mark}.history.log').as_posix()
+    # 每个HOST扫描URL的过滤,建议开启
+    config[GB_EXCLUDE_HISTORY] = True
+    # # 每个域名的URL结果独立保存
+    # config[GB_SINGLE_STORAGE] = True
     ##################################################################
+    # 写入端口命中结果，记录常见web端口
+    config[GB_SAVE_HIT_RESULT] = True
+    config[GB_HIT_PORT_FILE] = config[GB_BASE_DIR].joinpath('ports.hit')
+    #######################################################################
 
 
 def init_custom(config):
@@ -53,16 +58,17 @@ def init_custom(config):
     ##################################################################
     # 在配置文件中配置默认目标参数  支持文件 或 URL
     config[GB_TARGET] = "target.txt"
-    config[GB_PORTS] = "ports.txt"
+    # 默认请求协议
+    config[GB_PROTOS] = ["http", "https"]
+    # 默认请求端口
+    config[GB_PORTS] = [80, 443]  # "ports.txt"
+    # 对所有输入的目标都一律拆分为 HOST
+    config[GB_ALL_2_HOST] = False
     ##################################################################
     # 默认线程数
     config[GB_THREADS_COUNT] = 200
-    # 每个线程之间的延迟 单位S秒
+    # 每个线程之间的延迟 单位S秒  # 暂时无效
     config[GB_THREAD_SLEEP] = 0
     # 任务分块大小 所有任务会被分为多个列表
     config[GB_TASK_CHUNK_SIZE] = 200
     ##################################################################
-    # 写入命中结果
-    config[GB_SAVE_HIT_RESULT] = True
-    config[GB_HIT_PORT_FILE] = config[GB_BASE_DIR].joinpath('ports.hit')
-    #######################################################################

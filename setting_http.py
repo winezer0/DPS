@@ -14,8 +14,6 @@ def init_custom(config):
     """
     ##################################################################
     # HTTP请求相关配置
-    # 默认请求协议
-    config[GB_PROTOS] = ["http", "https"]
     # 默认请求方法
     config[GB_REQ_METHOD] = "get"
     # 默认请求数据
@@ -56,3 +54,4 @@ def init_custom(config):
     config[GB_EXCLUDE_STATUS] = [502, 400]
     # 判断URI是否不存在的正则，如果页面标题存在如下定义的内容，将从Result结果中剔除到ignore结果中 #re.I 忽略大小写
     config[GB_EXCLUDE_REGEXP] = None  # r"页面不存在|未找到|not[ -]found|403|404|410"
+    ##################################################################

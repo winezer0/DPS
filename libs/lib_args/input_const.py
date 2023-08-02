@@ -22,6 +22,7 @@ GB_EXCLUDE_HISTORY = ""
 # 结果文件
 GB_IGNORE_FORMAT = ""
 GB_RESULT_FORMAT = ""
+# GB_SINGLE_STORAGE = ""
 
 # 命中文件
 GB_SAVE_HIT_RESULT = ""
@@ -31,6 +32,7 @@ GB_HIT_PORT_FILE = ""
 GB_TARGET = ""
 GB_PORTS = ""
 GB_PROTOS = ""
+GB_ALL_2_HOST = ""
 ######################################################
 GB_THREADS_COUNT = ""
 GB_THREAD_SLEEP = ""
