@@ -50,6 +50,7 @@ def init_custom(config):
         # 'Referer': 'http://testphp.vulnweb.com/',
         'Upgrade-Insecure-Requests': '1',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188',
+        # 'Transfer-Encoding': 'identity',
         'Connection': 'Close',
     }
     # 是否自动根据URL设置动态HOST头
