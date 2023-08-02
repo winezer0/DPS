@@ -70,8 +70,8 @@ def analysis_resp_body(req_url, encode_content, resp_content_need):
 def get_resp_body_content_opt(encode_content, req_url, resp_content_need):
     current_module = HTTP_RESP_CONTENT_OPT
     try:
-        if current_module in [RESP_CONTENT_BLANK, RESP_CONTENT_ERROR, RESP_CONTENT_LARGE]:
-            resp_content_opt = current_module
+        if encode_content in [RESP_CONTENT_BLANK, RESP_CONTENT_ERROR, RESP_CONTENT_LARGE]:
+            resp_content_opt = encode_content
         else:
             # 根据用户输入获取指定的数据
             if isinstance(resp_content_need, bool) and resp_content_need:
@@ -95,9 +95,9 @@ def get_resp_body_content_opt(encode_content, req_url, resp_content_need):
 def get_resp_body_content_size(encode_content, req_url):
     current_module = HTTP_RESP_SIZE
     try:
-        if current_module in [RESP_CONTENT_BLANK, RESP_CONTENT_ERROR]:
+        if encode_content in [RESP_CONTENT_BLANK, RESP_CONTENT_ERROR]:
             resp_text_size = RESP_SIZE_BLANK
-        elif current_module in [RESP_CONTENT_LARGE]:
+        elif encode_content in [RESP_CONTENT_LARGE]:
             resp_text_size = RESP_SIZE_LARGE
         else:
             resp_text_size = len(encode_content)
@@ -110,9 +110,9 @@ def get_resp_body_content_size(encode_content, req_url):
 def get_resp_body_content_title(encode_content, req_url):
     current_module = HTTP_RESP_TITLE
     try:
-        if current_module in [RESP_CONTENT_BLANK, RESP_CONTENT_ERROR]:
+        if encode_content in [RESP_CONTENT_BLANK, RESP_CONTENT_ERROR]:
             resp_text_title = RESP_TITLE_BLANK
-        elif current_module in [RESP_CONTENT_LARGE]:
+        elif encode_content in [RESP_CONTENT_LARGE]:
             resp_text_title = RESP_TITLE_LARGE
         else:
             resp_text_title = extract_title_by_re(encode_content)
@@ -180,9 +180,9 @@ def extract_title_by_bs(html_markup):
 def get_resp_body_content_hash(encode_content, req_url):
     current_module = HTTP_RESP_CONTENT_CRC
     try:
-        if current_module in [RESP_CONTENT_BLANK, RESP_CONTENT_ERROR]:
+        if encode_content in [RESP_CONTENT_BLANK, RESP_CONTENT_ERROR]:
             resp_hash_content = RESP_CONTENT_CRC_BLANK
-        elif current_module in [RESP_CONTENT_LARGE]:
+        elif encode_content in [RESP_CONTENT_LARGE]:
             resp_hash_content = RESP_CONTENT_CRC_LARGE
         else:
             resp_hash_content = calc_dict_info_hash(encode_content, crc_mode=True)
