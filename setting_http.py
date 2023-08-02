@@ -39,7 +39,19 @@ def init_custom(config):
     config[GB_RETRY_TIMES] = 0
     ##################################################################
     # 默认请求头设置
-    config[GB_REQ_HEADERS] = {}
+    config[GB_REQ_HEADERS] = {
+        # 'Host': 'testphp.vulnweb.com',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Encoding': 'gzip, deflate',
+        'Accept-Language': 'zh-CN,zh;q=0.9',
+        'Cache-Control': 'max-age=0',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        # 'Origin': 'http://testphp.vulnweb.com',
+        # 'Referer': 'http://testphp.vulnweb.com/',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188',
+        'Connection': 'Close',
+    }
     # 是否自动根据URL设置动态HOST头
     config[GB_DYNA_REQ_HOST] = True
     # 是否自动根据URL设置动态refer头

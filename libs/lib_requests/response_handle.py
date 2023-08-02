@@ -195,20 +195,31 @@ def get_resp_body_content_hash(encode_content, req_url):
 def get_resp_body_content(req_url, resp, resp_length, http_maximum_read, req_stream):
     current_module = "GET_RAW_RESP_CONTENT"
     try:
-        # 1、正常获取到了响应头长度, 判断当前结果大小是否超出限制
-        if isinstance(resp_length, int) and resp_length == 0:
-            encode_content = RESP_CONTENT_BLANK
-        elif isinstance(resp_length, int) and 0 < resp_length < http_maximum_read:
-            # 大小没有超出限制, 可以进行正常读取
-            encode_content = content_encode(resp.content)  # bytes类型
-        else:
-            # 大小超出限制|或者没有发现大小数据,只读取部分数据
+        # 本思路有缺陷，没有考虑到获取不到长度可能是由于请求头的问题,不是大小问题, 待修复请求头后再启用
+        # # 1、正常获取到了响应头长度, 判断当前结果大小是否超出限制
+        # if isinstance(resp_length, int) and resp_length == 0:
+        #     encode_content = RESP_CONTENT_BLANK
+        # elif isinstance(resp_length, int) and 0 < resp_length < http_maximum_read:
+        #     # 大小没有超出限制, 可以进行正常读取
+        #     encode_content = content_encode(resp.content)  # bytes类型
+        # else:
+        #     # 大小超出限制|或者没有发现大小数据,只读取部分数据
+        #     # 如果是流模式,使用raw读取 http_maximum_read
+        #     if req_stream:
+        #         bytes_content = resp.raw.read(http_maximum_read)
+        #         encode_content = content_encode(bytes_content)
+        #     else:
+        #         encode_content = RESP_CONTENT_LARGE
+
+        if isinstance(resp_length, int) and resp_length > http_maximum_read:
             # 如果是流模式,使用raw读取 http_maximum_read
             if req_stream:
                 bytes_content = resp.raw.read(http_maximum_read)
                 encode_content = content_encode(bytes_content)
             else:
                 encode_content = RESP_CONTENT_LARGE
+        else:
+            encode_content = content_encode(resp.content)  # bytes类型
     except Exception as error:
         show_requests_error(req_url, [], current_module, error)
         encode_content = RESP_CONTENT_ERROR
@@ -218,14 +229,29 @@ def get_resp_body_content(req_url, resp, resp_length, http_maximum_read, req_str
 async def get_resp_body_content_httpx(req_url, resp, resp_length, http_maximum_read, req_stream):
     current_module = "GET_RAW_RESP_CONTENT"
     try:
-        # 1、正常获取到了响应头长度, 判断当前结果大小是否超出限制
-        if isinstance(resp_length, int) and resp_length == 0:
-            encode_content = RESP_CONTENT_BLANK
-        elif isinstance(resp_length, int) and 0 < resp_length < http_maximum_read:
-            # 大小没有超出限制, 可以进行正常读取
-            encode_content = content_encode(resp.content)  # bytes类型
-        else:
-            # 大小超出限制|或者没有发现大小数据,只读取部分数据
+        # 本思路有缺陷，没有考虑到获取不到长度可能是由于请求头的问题,不是大小问题, 待修复请求头后再启用
+        # # 1、正常获取到了响应头长度, 判断当前结果大小是否超出限制
+        # if isinstance(resp_length, int) and resp_length == 0:
+        #     encode_content = RESP_CONTENT_BLANK
+        # elif isinstance(resp_length, int) and 0 < resp_length < http_maximum_read:
+        #     # 大小没有超出限制, 可以进行正常读取
+        #     encode_content = content_encode(resp.content)  # bytes类型
+        # else:
+        #     # 大小超出限制|或者没有发现大小数据,只读取部分数据
+        #     # 如果是流模式,使用raw读取 http_maximum_read
+        #     if req_stream:
+        #         chunk_size = 1024
+        #         total_bytes = bytes()
+        #         async for chunk in resp.aiter_bytes(chunk_size=chunk_size):
+        #             total_bytes += chunk
+        #             # print(f"Received {len(chunk)} bytes")
+        #             if len(total_bytes) >= http_maximum_read:
+        #                 break
+        #         encode_content = content_encode(total_bytes)
+        #     else:
+        #         encode_content = RESP_CONTENT_LARGE
+
+        if isinstance(resp_length, int) and resp_length > http_maximum_read:
             # 如果是流模式,使用raw读取 http_maximum_read
             if req_stream:
                 chunk_size = 1024
@@ -238,6 +264,8 @@ async def get_resp_body_content_httpx(req_url, resp, resp_length, http_maximum_r
                 encode_content = content_encode(total_bytes)
             else:
                 encode_content = RESP_CONTENT_LARGE
+        else:
+            encode_content = content_encode(resp.content)  # bytes类型
     except Exception as error:
         show_requests_error(req_url, [], current_module, error)
         encode_content = RESP_CONTENT_ERROR

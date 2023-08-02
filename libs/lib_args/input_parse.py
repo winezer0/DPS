@@ -115,8 +115,7 @@ def config_dict_handle(config_dict):
     # HTTP 头设置
     config_dict[GB_REQ_HEADERS] = {
         'User-Agent': random_useragent(HTTP_USER_AGENTS, config_dict[GB_RANDOM_UA]),
-        'X_FORWARDED_FOR': random_x_forwarded_for(config_dict[GB_RANDOM_XFF]),
-        'Accept-Encoding': ''
+        'X-Forwarded-For': random_x_forwarded_for(config_dict[GB_RANDOM_XFF]),
     }
     update_dict[GB_REQ_HEADERS] = config_dict[GB_REQ_HEADERS]
     return update_dict
@@ -188,5 +187,3 @@ def vars_to_param(var_name):
     # 基于变量名的更通用的实现, 要求变量是全局变量.
     param_name = str(globals()[var_name]).replace("GB_", "").lower()
     return param_name
-
-
