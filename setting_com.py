@@ -62,8 +62,15 @@ def init_custom(config):
     config[GB_PROTOS] = ["http", "https"]
     # 默认请求端口
     config[GB_PORTS] = [80, 443]  # "ports.txt"
+    # 对于URL中的80 443 端口进行隐藏
+    config[GB_REMOVE_80_443] = True
+
     # 对所有输入的目标都一律拆分为 HOST
     config[GB_ALL_2_HOST] = False
+    # 对生成的URL添加默认访问的路径
+    config[GB_PATHS] = None #  ["/"]  # "path.txt"
+    # 使用绝对路径更新URL
+    config[GB_PATH_ABSOLUTE] = False
     ##################################################################
     # 默认线程数
     config[GB_THREADS_COUNT] = 200

@@ -31,8 +31,11 @@ GB_HIT_PORT_FILE = ""
 # 自定义输入参数相关
 GB_TARGET = ""
 GB_PORTS = ""
+GB_REMOVE_80_443 = ""
 GB_PROTOS = ""
 GB_ALL_2_HOST = ""
+GB_PATHS = ""
+GB_PATH_ABSOLUTE = ""
 ######################################################
 GB_THREADS_COUNT = ""
 GB_THREAD_SLEEP = ""

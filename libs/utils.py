@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 import itertools
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urljoin
 
 from libs.lib_args.input_const import *
 from libs.lib_input_format.format_hosts import extract_host_from_host, extract_host_from_url, \
@@ -11,7 +11,7 @@ from libs.lib_input_format.format_input import load_targets
 from libs.lib_input_format.format_ports import parse_ports, remove_80_443
 
 
-def initialize_urls(config_dict, remove_common_port=True):
+def initialize_urls(config_dict):
     protos = load_targets(config_dict[GB_PROTOS])
 
     ports = load_targets(config_dict[GB_PORTS])
@@ -34,8 +34,14 @@ def initialize_urls(config_dict, remove_common_port=True):
         urls.extend(group_proto_host(protos=protos, hosts=list_host_port))
         urls.extend(list_proto_host_port)
 
-    if remove_common_port:
+    # 移除80 443端口后缀
+    if config_dict[GB_REMOVE_80_443]:
         urls = [remove_80_443(url) for url in urls]
+
+    # 更新path路径
+    paths = load_targets(config_dict[GB_PATHS])
+    if urls and paths:
+        urls = combine_urls_and_paths(urls, paths, absolute=config_dict[GB_PATH_ABSOLUTE])
 
     urls = list(dict.fromkeys(urls))
     return urls
@@ -59,6 +65,22 @@ def group_proto_host(protos, hosts):
         urls = [f"{proto}://{host}" for proto, host in group]
         urls = list(dict.fromkeys(urls))
     return urls
+
+
+def combine_urls_and_paths(url_list, path_list, absolute=False):
+    # 组合URl和路径
+    url_path_tuples = list(itertools.product(url_list, path_list))
+    url_path_list = []
+    for url, path in url_path_tuples:
+        if absolute:
+            # 追加到根目录
+            url_path_list.append(urljoin(url, f"/{str(path).lstrip('/')}"))
+        else:
+            # 追加到当前目录
+            url_path_list.append(urljoin(url, f"./{str(path).lstrip('/')}"))
+    # 去重URL
+    url_path_list = list(set(url_path_list))
+    return url_path_list
 
 
 def result_rule_classify(hit_str_list, hit_port_file):
