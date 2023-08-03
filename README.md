@@ -4,16 +4,20 @@
 
 ```
 原始目标：
-    支持从URL|Domain|IP:PORT|Domain:PORT|等格式提取出 IP|Domain
-    再后统一进行http协议端口扫描, 企图发现Cdn下，同域名的其他web端口
+    1、从URL|Domain|IP:PORT|Domain:PORT|等格式提取出 IP|Domain
+    2、统一进行http协议端口扫描, 企图发现Cdn下，同域名的其他web端口
 
 衍生功能：
-    支持URL格式存活检测
-    支持Domain格式存活检测
-    支持IP:PORT格式存活检测
-    支持Domain:PORT格式存活检测
-    支持IP格式存活检测 (暂不支持C段存活检测)
-    (暂不支持指定PATH路径检测,实现较简单，后续需要再添加)
+    支持 URL 格式存活检测
+    支持 Domain|IP:PORT|Domain:PORT 格式存活检测
+    支持 IP C段 IP|IP 范围  格式存活检测  
+    支持 自定义PATHS路径 
+
+格式示例： 
+    www.baidu.com
+    www.baidu.com:8888
+    https://www.baidu.com
+    1.1.1.1/28 | 1.1.1.1-100 | 1.1.1.1-1.1.1.100
 ```
 
 

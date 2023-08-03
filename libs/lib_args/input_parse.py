@@ -31,7 +31,10 @@ def args_parser(config_dict):
         # 指定扫描的协议类型
         {"param": GB_PROTOS, "nargs": "+", "help": f"Specify the proto list or proto string"},
 
-        # 指定扫描的端口号
+        # 指定扫描的路径
+        {"param": GB_PATHS, "nargs": "+", "help": f"Specify the Target Paths or Files"},
+
+        # 指定扫描所有HOST的端口
         {"param": GB_ALL_2_HOST, "action": "store_true", "help": f"Specify the Wild  Port Scan Mode"},
 
         # 开启调试功能

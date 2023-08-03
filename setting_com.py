@@ -23,7 +23,7 @@ def init_common(config):
     config[GB_RUN_TIME] = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
     ##################################################################
     # 版本号配置
-    config[GB_VERSION] = "Ver 0.2.2 2023-8-03 12:30"
+    config[GB_VERSION] = "Ver 0.2.3 2023-8-03 15:30"
     ##################################################################
     # 是否显示DEBUG级别信息,默认False
     config[GB_DEBUG_FLAG] = False
@@ -64,11 +64,10 @@ def init_custom(config):
     config[GB_PORTS] = [80, 443]  # "ports.txt"
     # 对于URL中的80 443 端口进行隐藏
     config[GB_REMOVE_80_443] = True
-
-    # 对所有输入的目标都一律拆分为 HOST
+    # 对所有输入的目标都一律拆分为 HOST 便于进行端口扫描
     config[GB_ALL_2_HOST] = False
     # 对生成的URL添加默认访问的路径
-    config[GB_PATHS] = None #  ["/"]  # "path.txt"
+    config[GB_PATHS] = None  # ["/"]  # "path.txt"
     # 使用绝对路径更新URL
     config[GB_PATH_ABSOLUTE] = False
     ##################################################################
