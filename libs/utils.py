@@ -5,10 +5,10 @@ import itertools
 from urllib.parse import urlparse
 
 from libs.lib_args.input_const import *
-from libs.lib_input_format.format_hosts import extract_host_from_host, remove_80_443, extract_host_from_url, \
+from libs.lib_input_format.format_hosts import extract_host_from_host, extract_host_from_url, \
     classify_hosts
 from libs.lib_input_format.format_input import load_targets
-from libs.lib_input_format.format_ports import parse_ports
+from libs.lib_input_format.format_ports import parse_ports, remove_80_443
 
 
 def initialize_urls(config_dict, remove_common_port=True):

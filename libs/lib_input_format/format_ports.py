@@ -1,5 +1,14 @@
 #!/usr/bin/env python
 # encoding: utf-8
+from urllib.parse import urlparse
+
+
+def remove_80_443(url):
+    parsed_url = urlparse(url)
+    if parsed_url.port in [80, 443]:
+        return f"{parsed_url.scheme}://{parsed_url.hostname}"
+    return url
+
 
 def parse_ports(ports):
     # 解析输入的端口字符串列表
@@ -8,7 +17,7 @@ def parse_ports(ports):
     # 进行格式解析 第一次解析 分割逗号和空格
     tmp = []
     for port in ports:
-        if isinstance(port,int):
+        if isinstance(port, int):
             tmp.append(port)
         elif "," in str(port):
             tmp.extend(str(port).split(","))

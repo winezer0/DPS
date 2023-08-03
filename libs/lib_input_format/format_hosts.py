@@ -3,6 +3,9 @@
 import re
 from urllib.parse import urlparse
 
+from libs.lib_input_format.format_ipv4 import is_ipv4, is_ip_cidr, is_ip_range_long, is_ip_range_short, parse_ip_cidr, \
+    parse_ip_range_l, parse_ip_range_s
+
 
 def is_http_url(string):
     pattern = r'^https?://[^\s/$.?#].[^\s]*$'
@@ -17,11 +20,6 @@ def is_valid_url(target):
 def is_host_port(string):
     pattern = r'^[a-zA-Z0-9.-]+:\d+$'
     return re.match(pattern, string) is not None
-
-
-def is_ipv4(string):
-    domain_pattern = r'^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    return re.match(domain_pattern, string) is not None
 
 
 def is_domain(string):
@@ -61,6 +59,12 @@ def classify_hosts(hosts):
             list_ipv4.append(host)
         elif is_domain(host):
             list_host.append(host)
+        elif is_ip_cidr(host):
+            list_host.extend(parse_ip_cidr(host))
+        elif is_ip_range_short(host):
+            list_host.extend(parse_ip_range_s(host))
+        elif is_ip_range_long(host):
+            list_host.extend(parse_ip_range_l(host))
         else:
             # list_error.append(target)
             print(f"[-] 发现错误格式的输入数据:{host}")
@@ -73,8 +77,3 @@ def classify_hosts(hosts):
     return list_proto_host_port, list_host_port, list_ipv4, list_host
 
 
-def remove_80_443(url):
-    parsed_url = urlparse(url)
-    if parsed_url.port in [80,443]:
-        return f"{parsed_url.scheme}://{parsed_url.hostname}"
-    return url
