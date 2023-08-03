@@ -26,7 +26,7 @@ def init_common(config):
     config[GB_VERSION] = "Ver 0.2.0 2023-8-03 01:30"
     ##################################################################
     # 是否显示DEBUG级别信息,默认False
-    config[GB_DEBUG_FLAG] = True
+    config[GB_DEBUG_FLAG] = False
     ##################################################################
     # 设置日志输出文件路径 #目录不存在会自动创建
     config[GB_LOG_INFO_FILE] = config[GB_BASE_DIR].joinpath("runtime", "runtime_info.log").as_posix()
@@ -39,7 +39,7 @@ def init_common(config):
     # 记录扫描已完成的URL 针对每个目标生成不同的记录文件
     config[GB_HISTORY_FORMAT] = config[GB_BASE_DIR].joinpath("result", '{mark}.history.log').as_posix()
     # 每个HOST扫描URL的过滤,建议开启
-    config[GB_EXCLUDE_HISTORY] = not True
+    config[GB_EXCLUDE_HISTORY] = True
     # # 每个域名的URL结果独立保存
     # config[GB_SINGLE_STORAGE] = True
     ##################################################################

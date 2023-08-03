@@ -15,7 +15,7 @@ def init_custom(config):
     ##################################################################
     # HTTP请求相关配置
     # 默认请求方法
-    config[GB_REQ_METHOD] = "get"
+    config[GB_REQ_METHOD] = "GET"
     # 默认请求数据
     config[GB_REQ_BODY] = None
     # 对外请求代理
@@ -46,21 +46,21 @@ def init_custom(config):
         'Accept-Language': 'zh-CN,zh;q=0.9',
         'Cache-Control': 'max-age=0',
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Origin': 'http://www.baidu.com/',  # 默认会自动添加请求URL
-        'Referer': 'http://www.baidu.com/',  # 默认会自动添加请求URL
+        # 'Origin': 'http://www.baidu.com/',   # 默认会自动添加请求URL
+        # 'Referer': 'http://www.baidu.com/',  # 默认会自动添加请求URL
         # 'Upgrade-Insecure-Requests': '1',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188',
-        # 'Transfer-Encoding': 'identity',
-        'Connection': 'Close',
+        'Transfer-Encoding': 'identity',      # 多个请求头综合影响响应头CL的获取
+        'Connection': 'close',
     }
     # 是否自动根据URL设置动态HOST头
     config[GB_DYNA_REQ_HOST] = True
     # 是否自动根据URL设置动态refer头
     config[GB_DYNA_REQ_REFER] = True
     # 随机User-Agent # 可能会导致无法建立默认会话 # 报错内容 Exceeded 30 redirects
-    config[GB_RANDOM_UA] = True
-    # 是否允许随机X-Forwarded-For
-    config[GB_RANDOM_XFF] = True
+    config[GB_RANDOM_UA] = False
+    # 是否允许随机X-Forwarded-For  # 支持False|True|str 如 127.0.0.1
+    config[GB_RANDOM_XFF] = False
     ##################################################################
     # 排除指定结果
     # 判断URI不存在的状态码，多个以逗号隔开,符合该状态码的响应将不会写入结果文件
