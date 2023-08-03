@@ -4,6 +4,11 @@ import ipaddress
 import re
 
 
+def is_ipv4(string):
+    ip_pattern = r'^(\d{1,3}\.){3}\d{1,3}$'
+    return re.match(ip_pattern, string) is not None
+
+
 def is_ip_cidr_by_ipaddress(address):
     try:
         # strict 设置支持非严格网段
@@ -21,17 +26,17 @@ def is_ip_cidr(address):
         return False
 
 
-def is_ip_range_long(address):
-    pattern = r'^(\d{1,3}\.){3}\d{1,3}-\s*(\d{1,3}\.){3}\d{1,3}$'
+def is_ip_range_l(address):
+    pattern = r'^(\d{1,3}\.){3}\d{1,3}-(\d{1,3}\.){3}\d{1,3}$'
     if re.match(pattern, address):
         return True
     else:
         return False
 
 
-def is_ip_range_short(ip_range):
+def is_ip_range_s(address):
     pattern = r'^(\d{1,3}\.\d{1,3}\.\d{1,3}\.)\d{1,3}-(\d{1,3})$'
-    match = re.match(pattern, ip_range)
+    match = re.match(pattern, address)
     if match:
         return True
     else:
@@ -78,16 +83,11 @@ def parse_ip_range_l(ip_range):
 
 
 if __name__ == '__main__':
-    if is_ip_range_long("1.1.1.1-1.1.1.2"):
-        print(parse_ip_range_l("1.1.1.1-1.1.1.2"))
-
-    if is_ip_range_short("1.1.1.1-2"):
+    if is_ip_range_s("1.1.1.1-2"):
         print(parse_ip_range_s("1.1.1.1-2"))
 
+    if is_ip_range_l("1.1.1.1-1.1.2.2"):
+        print(parse_ip_range_l("1.1.1.1-1.1.2.2"))
+
     if is_ip_cidr("1.1.1.1/28"):
-        print(parse_ip_cidr("1.1.1.1/30"))
-
-
-def is_ipv4(string):
-    ip_pattern = r'^(\d{1,3}\.){3}\d{1,3}$'
-    return re.match(ip_pattern, string) is not None
+        print(parse_ip_cidr("1.1.1.1/26"))

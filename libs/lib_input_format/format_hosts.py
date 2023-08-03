@@ -3,7 +3,7 @@
 import re
 from urllib.parse import urlparse
 
-from libs.lib_input_format.format_ipv4 import is_ipv4, is_ip_cidr, is_ip_range_long, is_ip_range_short, parse_ip_cidr, \
+from libs.lib_input_format.format_ipv4 import is_ipv4, is_ip_cidr, is_ip_range_l, is_ip_range_s, parse_ip_cidr, \
     parse_ip_range_l, parse_ip_range_s
 
 
@@ -61,9 +61,9 @@ def classify_hosts(hosts):
             list_host.append(host)
         elif is_ip_cidr(host):
             list_host.extend(parse_ip_cidr(host))
-        elif is_ip_range_short(host):
+        elif is_ip_range_s(host):
             list_host.extend(parse_ip_range_s(host))
-        elif is_ip_range_long(host):
+        elif is_ip_range_l(host):
             list_host.extend(parse_ip_range_l(host))
         else:
             # list_error.append(target)
