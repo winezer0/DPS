@@ -82,6 +82,20 @@ def parse_ip_range_l(ip_range):
     return ip_list
 
 
+def remove_private_ips(ip_list):
+    public_ips = []
+    for ip in ip_list:
+        try:
+            # 验证IP地址或CIDR网段是否有效
+            ip_network = ipaddress.ip_network(ip, strict=False)
+            # 排除私有IP地址
+            if not ip_network.is_private:
+                public_ips.append(str(ip_network))
+        except ValueError:
+            print(f"无效的IP地址或CIDR网段: {ip}")
+    return public_ips
+
+
 if __name__ == '__main__':
     if is_ip_range_s("1.1.1.1-2"):
         print(parse_ip_range_s("1.1.1.1-2"))

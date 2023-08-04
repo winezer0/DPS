@@ -43,7 +43,7 @@ def extract_host_from_host(host):
     return host
 
 
-def classify_hosts(hosts):
+def classify_hosts(hosts, parse_cidr=True):
     # 将目标分类为  HOST, HOST_PORT, PROTO_HOST_PORT
     list_host = []
     list_ipv4 = []
@@ -60,7 +60,10 @@ def classify_hosts(hosts):
         elif is_domain(host):
             list_host.append(host)
         elif is_ip_cidr(host):
-            list_host.extend(parse_ip_cidr(host))
+            if parse_cidr:
+                list_host.extend(parse_ip_cidr(host))
+            else:
+                list_host.append(host)
         elif is_ip_range_s(host):
             list_host.extend(parse_ip_range_s(host))
         elif is_ip_range_l(host):
