@@ -18,19 +18,19 @@ def initialize_urls(config_dict):
     ports = parse_ports(ports)
 
     targets = load_targets(config_dict[GB_TARGET])
-    list_proto_host_port, list_host_port, list_ipv4, list_host = classify_hosts(targets)
+    list_proto_host_port, list_host_port, list_ipv4, list_domain = classify_hosts(targets)
     urls = []
     if config_dict[GB_ALL_2_HOST]:
         hosts = []
         hosts.extend(list_ipv4)
-        hosts.extend(list_host)
+        hosts.extend(list_domain)
         hosts.extend([extract_host_from_host(host_port) for host_port in list_host_port])
         hosts.extend([extract_host_from_url(proto_host_port) for proto_host_port in list_proto_host_port])
         hosts = list(dict.fromkeys(hosts))
         urls = group_proto_host_port(protos=protos, hosts=hosts, ports=ports)
     else:
         urls.extend(group_proto_host_port(protos=protos, hosts=list_ipv4, ports=ports))
-        urls.extend(group_proto_host_port(protos=protos, hosts=list_host, ports=ports))
+        urls.extend(group_proto_host_port(protos=protos, hosts=list_domain, ports=ports))
         urls.extend(group_proto_host(protos=protos, hosts=list_host_port))
         urls.extend(list_proto_host_port)
 

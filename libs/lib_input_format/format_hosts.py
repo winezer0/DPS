@@ -44,11 +44,11 @@ def extract_host_from_host(host):
 
 
 def classify_hosts(hosts, parse_cidr=True):
-    # 将目标分类为  HOST, HOST_PORT, PROTO_HOST_PORT
-    list_host = []
-    list_ipv4 = []
-    list_host_port = []
-    list_proto_host_port = []
+    # 将目标分类为  IP, Domain, HOST_PORT, PROTO_HOST_PORT
+    list_ipv4 = []  # 存储 纯IP
+    list_domain = []  # 存储 纯域名
+    list_host_port = []  # 存储IP:Port|域名:Port
+    list_proto_host_port = []  # 存储 URL
     # list_error = []
     for host in hosts:
         if is_http_url(host):
@@ -58,16 +58,16 @@ def classify_hosts(hosts, parse_cidr=True):
         elif is_ipv4(host):
             list_ipv4.append(host)
         elif is_domain(host):
-            list_host.append(host)
+            list_domain.append(host)
         elif is_ip_cidr(host):
             if parse_cidr:
-                list_host.extend(parse_ip_cidr(host))
+                list_ipv4.extend(parse_ip_cidr(host))
             else:
-                list_host.append(host)
+                list_ipv4.append(host)
         elif is_ip_range_s(host):
-            list_host.extend(parse_ip_range_s(host))
+            list_ipv4.extend(parse_ip_range_s(host))
         elif is_ip_range_l(host):
-            list_host.extend(parse_ip_range_l(host))
+            list_ipv4.extend(parse_ip_range_l(host))
         else:
             # list_error.append(target)
             print(f"[-] 发现错误格式的输入数据:{host}")
