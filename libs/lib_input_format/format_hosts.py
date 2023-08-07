@@ -75,8 +75,8 @@ def classify_hosts(hosts, parse_cidr=True):
     # 去重输入目标
     list_proto_host_port = list(dict.fromkeys(list_proto_host_port))
     list_host_port = list(dict.fromkeys(list_host_port))
-    list_host = list(dict.fromkeys(list_host))
+    list_domain = list(dict.fromkeys(list_domain))
     list_ipv4 = list(dict.fromkeys(list_ipv4))
-    return list_proto_host_port, list_host_port, list_ipv4, list_host
+    return list_proto_host_port, list_host_port, list_ipv4, list_domain
 
 
