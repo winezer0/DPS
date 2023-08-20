@@ -2,6 +2,8 @@
 
 支持基于HTTP协议的(URL访问|HOST:PORT|IP访问|域名访问|域名端口检测)工具
 
+目前缺陷： 标题内容获取失败
+
 ```
 原始目标：
     1、从URL|Domain|IP:PORT|Domain:PORT|等格式提取出 IP|Domain
