@@ -5,8 +5,14 @@ from urllib.parse import urlparse
 
 def remove_80_443(url):
     parsed_url = urlparse(url)
-    if parsed_url.port in [80, 443]:
-        return f"{parsed_url.scheme}://{parsed_url.hostname}"
+    try:
+        if parsed_url.port in [80, 443]:
+            return f"{parsed_url.scheme}://{parsed_url.hostname}"
+    except Exception as error:
+        if any(x in parsed_url for x in [':80', ':443'] ):
+            host_port = f"{parsed_url.scheme}://{parsed_url.hostname}"
+            print(f"Remove 80 443 Port Error: {error} reason: {host_port}")
+            return host_port
     return url
 
 
